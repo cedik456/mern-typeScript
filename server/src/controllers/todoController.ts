@@ -3,6 +3,8 @@ import TodoModel from "../models/Todo";
 import { errorResponse, successResponse } from "../utils/responseHandler";
 import { CreateTodoRequest, UpdateTodoRequest } from "../types/Todo";
 import { createTodoSchema } from "../schemas/todo.schema";
+import z from "zod";
+import { exit } from "node:process";
 
 export const getTodos = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -17,15 +19,8 @@ export const addTodos = async (
   req: Request<{}, {}, CreateTodoRequest>,
   res: Response
 ): Promise<void> => {
-  try {
-    const parseBody = createTodoSchema.parse(req.body);
-
-    const todo = await TodoModel.create(parseBody);
-
-    successResponse(res, 201, true, todo);
-  } catch (error) {
-    errorResponse(res, 500, false, "Failed to create todo");
-  }
+  const todo = await TodoModel.create(req.body);
+  successResponse(res, 201, true, todo);
 };
 
 export const updateTodos = async (
@@ -33,21 +28,18 @@ export const updateTodos = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-    const { title, description, completed } = req.body;
-
-    if (!id) {
-      errorResponse(res, 400, false, "ID is required");
-    }
-
+    const updateData = req.body;
     const updateTodo = await TodoModel.findByIdAndUpdate(
-      id,
-      { title, description, completed },
-      { new: true }
+      req.params.id,
+      updateData,
+      {
+        new: true,
+      }
     );
 
     if (!updateTodo) {
       errorResponse(res, 404, false, "Todo not found");
+      return;
     }
 
     successResponse(res, 200, true, updateTodo);

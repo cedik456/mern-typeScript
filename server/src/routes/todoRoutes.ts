@@ -5,14 +5,16 @@ import {
   getTodos,
   updateTodos,
 } from "../controllers/todoController";
+import { validateBody } from "../middlewares/validateBody";
+import { createTodoSchema, updateTodoSchema } from "../schemas/todo.schema";
 
 const router = Router();
 
 router.get("/", getTodos);
 
-router.post("/", addTodos);
+router.post("/", validateBody(createTodoSchema), addTodos);
 
-router.put("/:id", updateTodos);
+router.put("/:id", validateBody(updateTodoSchema), updateTodos);
 
 router.delete("/:id", deleteTodo);
 
