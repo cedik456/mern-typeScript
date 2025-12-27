@@ -2,9 +2,6 @@ import { Request, Response } from "express";
 import TodoModel from "../models/Todo";
 import { errorResponse, successResponse } from "../utils/responseHandler";
 import { CreateTodoRequest, UpdateTodoRequest } from "../types/Todo";
-import { createTodoSchema } from "../schemas/todo.schema";
-import z from "zod";
-import { exit } from "node:process";
 
 export const getTodos = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -57,12 +54,14 @@ export const deleteTodo = async (
 
     if (!id) {
       errorResponse(res, 400, false, "ID is required");
+      return;
     }
 
     const deleteTodo = await TodoModel.findByIdAndDelete(id);
 
     if (!deleteTodo) {
       errorResponse(res, 400, false, "Todo not found");
+      return;
     }
 
     successResponse(res, 200, true, deleteTodo);
