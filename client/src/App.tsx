@@ -97,7 +97,7 @@ function App() {
   return (
     <div className=" flex flex-col items-center justify-center">
       <div className="border-gray-400/20 border  p-4 rounded-lg w-full   shadow-lg">
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <input
             type="text"
             placeholder="Title"
@@ -120,7 +120,7 @@ function App() {
           >
             Add Todo
           </button>
-        </div>
+        </div> */}
 
         <ul>
           {todos.map((todo) => (
