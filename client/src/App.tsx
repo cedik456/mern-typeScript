@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import api from "./api/axios";
+import { useTodos } from "./hooks/useTodos";
 
 interface Todo {
   _id: string;
@@ -12,66 +13,28 @@ interface Todo {
 }
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todos, addTodo, updateTodo, deleteTodo } = useTodos();
+
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
 
-  const fetchTodos = async () => {
-    try {
-      const response = await api.get("/todos");
-
-      console.log("Response:", response);
-
-      if (response.data.success) {
-        setTodos(response.data.data);
-      } else {
-        console.error("Failed to fetch todos");
-      }
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
+  const hanldeAddTodo = async () => {
+    await addTodo(title, description);
+    setTitle("");
+    setDescription("");
   };
 
-  const addTodo = async () => {
-    try {
-      const response = await api.post("/todos", {
-        title,
-        description,
-      });
+  const handleUpdateTodo = async () => {
+    if (!editingId) return;
 
-      if (response.data.success) {
-        setTodos((prevTodos) => [...prevTodos, response.data.data]);
-        setTitle("");
-        setDescription("");
-      }
-    } catch (error) {
-      console.error("Error adding todo:", error);
-    }
-  };
-
-  const updateTodo = async () => {
-    try {
-      const response = await api.put(`todos/${editingId}`, {
-        title: editTitle,
-        description: editDescription,
-      });
-
-      if (response.data.success) {
-        setTodos((prev) =>
-          prev.map((todo) =>
-            todo._id === editingId ? response.data.data : todo
-          )
-        );
-        setEditTitle("");
-        setEditDescription("");
-        setEditingId(null);
-      }
-    } catch (error) {
-      console.error("Error updating todo:", error);
-    }
+    await updateTodo(editingId, editTitle, editDescription);
+    setEditingId(null);
+    setEditTitle("");
+    setEditDescription("");
   };
 
   const startEdit = (todo: Todo) => {
@@ -80,24 +43,10 @@ function App() {
     setEditDescription(todo.description);
   };
 
-  const deleteTodo = async (id: string) => {
-    try {
-      await api.delete(`todos/${id}`);
-
-      setTodos((prev) => prev.filter((todo) => todo._id !== id));
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
   return (
     <div className=" flex flex-col items-center justify-center">
       <div className="border-gray-400/20 border  p-4 rounded-lg w-full   shadow-lg">
-        {/* <div className="flex flex-col">
+        <div className="flex flex-col">
           <input
             type="text"
             placeholder="Title"
@@ -115,12 +64,12 @@ function App() {
           />
 
           <button
-            onClick={addTodo}
+            onClick={hanldeAddTodo}
             className="p-1.5 bg-gray-800 text-center w-1/2 text-white rounded-md mb-4 cursor-pointer hover:bg-gray-700 transition-colors"
           >
             Add Todo
           </button>
-        </div> */}
+        </div>
 
         <ul>
           {todos.map((todo) => (
@@ -150,7 +99,7 @@ function App() {
 
                     <div className="flex gap-2">
                       <button
-                        onClick={updateTodo}
+                        onClick={handleUpdateTodo}
                         className="text-sm text-gray-500"
                       >
                         Save
