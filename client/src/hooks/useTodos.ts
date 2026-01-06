@@ -13,7 +13,13 @@ interface Todo {
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   const fetchTodos = async () => {
+    setIsLoading(true);
+    setError(null);
+
     try {
       const response = await api.get("/todos");
 
@@ -26,10 +32,16 @@ export function useTodos() {
       }
     } catch (error) {
       console.error("Error fetching todos:", error);
+      setError("Error fetching todos");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const addTodo = async (title: string, description: string) => {
+    setIsLoading(true);
+    setError(null);
+
     try {
       const response = await api.post("/todos", {
         title,
@@ -41,12 +53,18 @@ export function useTodos() {
       }
     } catch (error) {
       console.error("Error adding todo:", error);
+      setError("Error adding todo");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updateTodo = async (id: string, title: string, description: string) => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      const response = await api.put(`todos/${id}`, {
+      const response = await api.put(`/todos/${id}`, {
         title,
         description,
       });
@@ -58,16 +76,25 @@ export function useTodos() {
       }
     } catch (error) {
       console.error("Error updating todo:", error);
+      setError("Error updating todo!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const deleteTodo = async (id: string) => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      await api.delete(`todos/${id}`);
+      await api.delete(`/todos/${id}`);
 
       setTodos((prev) => prev.filter((todo) => todo._id !== id));
     } catch (error) {
       console.error("Error deleting todo:", error);
+      setError("Error deleting todo!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,5 +107,7 @@ export function useTodos() {
     addTodo,
     updateTodo,
     deleteTodo,
+    isLoading,
+    error,
   };
 }
