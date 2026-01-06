@@ -10,12 +10,14 @@ interface TodoItemProps {
   todo: Todo;
   updateTodo: (id: string, title: string, description: string) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
+  isLoading: boolean;
 }
 
 export default function TodoItem({
   todo,
   updateTodo,
   deleteTodo,
+  isLoading,
 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<string>(todo.title);
@@ -40,12 +42,12 @@ export default function TodoItem({
   }, [todo.title, todo.description]);
 
   return (
-    <div className="flex items-center gap-3 mb-4  w-full">
-      <div className="bg-gray-400 rounded-full w-5 h-5" />
-      <li className="text-xl font-light text-gray-500 w-full">
+    <div className="flex items-center gap-3 mb-4 w-full">
+      <div className="bg-gray-400 rounded-full w-5 h-5 shrink-0" />
+      <li className="text-xl font-light text-gray-500 flex-1 min-w-0">
         {isEditing ? (
           <div className="flex justify-between items-center w-full">
-            <div className="flex-1 items-center  flex flex-col">
+            <div className="flex-1 text-left flex flex-col min-w-0">
               <input
                 type="text"
                 value={editTitle}
@@ -61,7 +63,7 @@ export default function TodoItem({
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button onClick={handleSave} className="text-sm text-gray-500">
                 Save
               </button>
@@ -72,21 +74,25 @@ export default function TodoItem({
           </div>
         ) : (
           <div className="flex items-center justify-between w-full">
-            <div className="flex-1 text-left">
-              <h3 className="text-sm">{todo.title}</h3>
-              <p className="text-xs">{todo.description}</p>
+            <div className="flex-1 text-left min-w-0">
+              <h3 className="text-sm truncate">{todo.title}</h3>
+              <p className="text-xs truncate wrap-break-word">
+                {todo.description}
+              </p>
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setIsEditing(true)}
                 className="text-sm text-gray-500 "
+                disabled={isLoading}
               >
                 Edit
               </button>
               <button
                 onClick={() => deleteTodo(todo._id)}
                 className="text-sm text-gray-500 "
+                disabled={isLoading}
               >
                 Delete
               </button>

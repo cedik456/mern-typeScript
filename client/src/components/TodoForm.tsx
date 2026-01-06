@@ -3,9 +3,10 @@ import React, { useState } from "react";
 // Confusing part
 interface TodoFormProps {
   onAddTodo: (title: string, description: string) => Promise<void>;
+  disabled?: boolean;
 }
 
-export default function TodoForm({ onAddTodo }: TodoFormProps) {
+export default function TodoForm({ onAddTodo, disabled }: TodoFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -36,7 +37,10 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
 
       <button
         onClick={handleSubmit}
-        className="p-1.5 bg-gray-800 text-center  text-white rounded-md mb-4 cursor-pointer hover:bg-gray-700 transition-colors"
+        className={`p-1.5 bg-gray-800 text-center  text-white rounded-md mb-4 cursor-pointer hover:bg-gray-700 transition-colors ${
+          disabled ? " cursor-not-allowed" : ""
+        }`}
+        disabled={disabled}
       >
         Add Todo
       </button>

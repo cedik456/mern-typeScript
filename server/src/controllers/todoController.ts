@@ -5,7 +5,7 @@ import { CreateTodoRequest, UpdateTodoRequest } from "../types/Todo";
 
 export const getTodos = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const todos = await TodoModel.find();
+    const todos = await TodoModel.find().sort({ createdAt: -1 });
     successResponse(res, 200, true, todos);
   } catch (error) {
     errorResponse(res, 500, false, "Failed to fetch todos");
