@@ -12,6 +12,7 @@ export default function TodoForm({ onAddTodo, disabled }: TodoFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim()) return;
     await onAddTodo(title, description);
     setTitle("");
     setDescription("");
