@@ -4,6 +4,7 @@ interface Todo {
   title: string;
   description?: string;
   completed: boolean;
+  date: Date;
 }
 
 const todoSchema = new Schema<Todo>(
@@ -19,6 +20,11 @@ const todoSchema = new Schema<Todo>(
     completed: {
       type: Boolean,
       default: false,
+    },
+    date: {
+      type: Date,
+      required: true,
+      default: Date.now,
     },
   },
   { timestamps: true }

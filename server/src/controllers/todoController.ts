@@ -5,7 +5,18 @@ import { CreateTodoRequest, UpdateTodoRequest } from "../types/Todo";
 
 export const getTodos = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const todos = await TodoModel.find().sort({ createdAt: -1 });
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const todos = await TodoModel.find({
+      date: { $gte: startOfDay, $lte: endOfDay },
+    }).sort({ createdAt: -1 });
+
+    console.log(todos);
+
     successResponse(res, 200, true, todos);
   } catch (error) {
     errorResponse(res, 500, false, "Failed to fetch todos");
@@ -16,7 +27,12 @@ export const addTodos = async (
   req: Request<{}, {}, CreateTodoRequest>,
   res: Response
 ): Promise<void> => {
-  const todo = await TodoModel.create(req.body);
+  const todoData = {
+    ...req.body,
+    date: new Date(),
+  };
+
+  const todo = await TodoModel.create(todoData);
   successResponse(res, 201, true, todo);
 };
 
