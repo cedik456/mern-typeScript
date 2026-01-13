@@ -25,8 +25,8 @@ export const getTodos = async (req: Request, res: Response): Promise<void> => {
       endOfDay = new Date(providedDate);
     }
 
-    startOfDay.setHours(0, 0, 0, 0);
-    endOfDay.setHours(23, 59, 59, 999);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
     const todos = await TodoModel.find({
       date: { $gte: startOfDay, $lte: endOfDay },
@@ -44,9 +44,13 @@ export const addTodos = async (
   req: Request<{}, {}, CreateTodoRequest>,
   res: Response
 ): Promise<void> => {
+  // Normalize date to start of today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const todoData = {
     ...req.body,
-    date: new Date(),
+    date: today,
   };
 
   const todo = await TodoModel.create(todoData);

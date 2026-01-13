@@ -12,14 +12,17 @@ interface Todo {
 
 export function useTodos(viewDate: Date) {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(false);
+  const [isMutating, setIsMutating] = useState<boolean>(false);
+
   const [error, setError] = useState<string | null>(null);
 
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
   const dateQuery = viewDate ? fmt(viewDate) : "";
 
   const fetchTodos = async () => {
-    setIsLoading(true);
+    setIsInitialLoading(true);
     setError(null);
 
     try {
@@ -36,12 +39,12 @@ export function useTodos(viewDate: Date) {
       console.error("Error fetching todos:", error);
       setError("Error fetching todos");
     } finally {
-      setIsLoading(false);
+      setIsInitialLoading(false);
     }
   };
 
   const addTodo = async (title: string, description: string) => {
-    setIsLoading(true);
+    setIsMutating(true);
     setError(null);
 
     try {
@@ -57,12 +60,12 @@ export function useTodos(viewDate: Date) {
       console.error("Error adding todo:", error);
       setError("Error adding todo");
     } finally {
-      setIsLoading(false);
+      setIsMutating(false);
     }
   };
 
   const updateTodo = async (id: string, title: string, description: string) => {
-    setIsLoading(true);
+    setIsMutating(true);
     setError(null);
 
     try {
@@ -80,12 +83,12 @@ export function useTodos(viewDate: Date) {
       console.error("Error updating todo:", error);
       setError("Error updating todo!");
     } finally {
-      setIsLoading(false);
+      setIsMutating(false);
     }
   };
 
   const deleteTodo = async (id: string) => {
-    setIsLoading(true);
+    setIsMutating(true);
     setError(null);
 
     try {
@@ -96,7 +99,7 @@ export function useTodos(viewDate: Date) {
       console.error("Error deleting todo:", error);
       setError("Error deleting todo!");
     } finally {
-      setIsLoading(false);
+      setIsMutating(false);
     }
   };
 
@@ -109,7 +112,8 @@ export function useTodos(viewDate: Date) {
     addTodo,
     updateTodo,
     deleteTodo,
-    isLoading,
+    isMutating,
+    isInitialLoading,
     error,
   };
 }
