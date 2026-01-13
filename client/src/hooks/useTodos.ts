@@ -10,19 +10,21 @@ interface Todo {
   updatedAt: string;
 }
 
-export function useTodos() {
+export function useTodos(viewDate: Date) {
   const [todos, setTodos] = useState<Todo[]>([]);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  const dateQuery = viewDate ? fmt(viewDate) : "";
 
   const fetchTodos = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await api.get("/todos");
-
+      const q = dateQuery ? `?date=${encodeURIComponent(dateQuery)}` : "";
+      const response = await api.get(`/todos${q}`);
       console.log("Response:", response);
 
       if (response.data.success) {
@@ -100,7 +102,7 @@ export function useTodos() {
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [dateQuery]);
 
   return {
     todos,
