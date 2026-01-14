@@ -25,7 +25,7 @@ export default function TodoForm({ onAddTodo, disabled }: TodoFormProps) {
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="border-gray-200 border rounded-sm p-1.5 mb-2 text-sm "
+        className="border-gray-200 border rounded-xl p-2 mb-2 px-4 text-sm  "
       />
 
       <input
@@ -33,12 +33,12 @@ export default function TodoForm({ onAddTodo, disabled }: TodoFormProps) {
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="border-gray-200 border rounded-sm p-1.5 mb-4 text-sm "
+        className="border-gray-200 border rounded-xl p-2 mb-4 text-sm px-4 "
       />
 
       <button
         onClick={handleSubmit}
-        className={`p-1.5 bg-gray-800 text-center  text-white rounded-md mb-4 cursor-pointer hover:bg-gray-700 transition-colors ${
+        className={`p-2 bg-gray-800 text-center   text-white rounded-xl mb-3 cursor-pointer hover:bg-gray-700 transition-colors ${
           disabled ? " cursor-not-allowed" : ""
         }`}
         disabled={disabled}

@@ -23,13 +23,13 @@ function App() {
   } = useTodos(viewDate);
 
   return (
-    <div className=" flex flex-col items-center justify-center">
-      <div className="border-gray-400/20 border  p-4 rounded-lg  md:w-1/2 w-full shadow-lg">
+    <div className=" flex flex-col items-center justify-center min-h-screen bg-[#0E0E0E] p-2">
+      <div className="border-gray-400/20 border  p-4 rounded-lg  md:w-1/4 w-full  shadow-lg md:h-200 h-full bg-[#FAFAFA]">
         <DateNavigator viewDate={viewDate} setViewDate={setViewDate} />
         <TodoForm onAddTodo={addTodo} disabled={isMutating} />
 
         {error && <p className="text-red-500 ">Error! Fetching Todo's!</p>}
-        {isInitialLoading && <p className="text-gray-500">Loading Todos...</p>}
+
         <ul>
           {todos.map((todo) => (
             <TodoItem

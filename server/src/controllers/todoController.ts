@@ -7,35 +7,30 @@ export const getTodos = async (req: Request, res: Response): Promise<void> => {
   try {
     const { date } = req.query;
 
-    let startOfDay = new Date();
-    let endOfDay = new Date();
+    // Use the date the client gave, or today if none
+    const d = date ? new Date(`${date}T00:00:00Z`) : new Date();
 
-    if (date) {
-      const providedDate = new Date(date as string);
-      if (isNaN(providedDate.getTime())) {
-        errorResponse(
-          res,
-          400,
-          false,
-          "Invalid date format. Use ISO YYYY-MM-DD"
-        );
-        return;
-      }
-      startOfDay = new Date(providedDate);
-      endOfDay = new Date(providedDate);
+    if (!date) {
+      // force today to UTC midnight
+      d.setUTCHours(0, 0, 0, 0);
     }
 
+    if (isNaN(d.getTime())) {
+      errorResponse(res, 400, false, "Invalid date format");
+    }
+
+    const startOfDay = new Date(d);
     startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(d);
     endOfDay.setUTCHours(23, 59, 59, 999);
 
     const todos = await TodoModel.find({
       date: { $gte: startOfDay, $lte: endOfDay },
     }).sort({ createdAt: -1 });
 
-    console.log(todos);
-
     successResponse(res, 200, true, todos);
-  } catch (error) {
+  } catch (err) {
     errorResponse(res, 500, false, "Failed to fetch todos");
   }
 };
@@ -46,11 +41,12 @@ export const addTodos = async (
 ): Promise<void> => {
   // Normalize date to start of today
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
 
   const todoData = {
     ...req.body,
     date: today,
+    completed: req.body.completed ?? false,
   };
 
   const todo = await TodoModel.create(todoData);

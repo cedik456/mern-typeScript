@@ -25,7 +25,7 @@ export default function DateNavigator({ viewDate, setViewDate }: Props) {
   const isToday = fmt(viewDate) === fmt(today);
 
   return (
-    <div className="flex justify-between items-center mb-4 text-gray-500">
+    <div className="flex justify-between items-center mb-6 text-gray-500">
       <button onClick={() => changeDay(-1)}>
         <ChevronLeft className="w-5 h-5 hover:text-gray-800 hover:cursor-pointer" />
       </button>

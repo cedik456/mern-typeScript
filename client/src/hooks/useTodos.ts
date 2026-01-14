@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 
-interface Todo {
+export interface Todo {
   _id: string;
   title: string;
   description: string;
@@ -18,9 +18,16 @@ export function useTodos(viewDate: Date) {
 
   const [error, setError] = useState<string | null>(null);
 
-  const fmt = (d: Date) => d.toISOString().slice(0, 10);
-  const dateQuery = viewDate ? fmt(viewDate) : "";
+  const fmt = (d: Date) => {
+    // Force date to UTC midnight first
+    const utc = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const y = utc.getUTCFullYear();
+    const m = String(utc.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(utc.getUTCDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
 
+  const dateQuery = viewDate ? fmt(viewDate) : "";
   const fetchTodos = async () => {
     setIsInitialLoading(true);
     setError(null);
@@ -54,7 +61,7 @@ export function useTodos(viewDate: Date) {
       });
 
       if (response.data.success) {
-        setTodos((prevTodos) => [...prevTodos, response.data.data]);
+        setTodos((prevTodos) => [response.data.data, ...prevTodos]);
       }
     } catch (error) {
       console.error("Error adding todo:", error);
@@ -64,7 +71,12 @@ export function useTodos(viewDate: Date) {
     }
   };
 
-  const updateTodo = async (id: string, title: string, description: string) => {
+  const updateTodo = async (
+    id: string,
+    title: string,
+    description: string,
+    completed?: boolean
+  ) => {
     setIsMutating(true);
     setError(null);
 
@@ -72,6 +84,7 @@ export function useTodos(viewDate: Date) {
       const response = await api.put(`/todos/${id}`, {
         title,
         description,
+        completed,
       });
 
       if (response.data.success) {
