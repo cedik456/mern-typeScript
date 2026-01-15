@@ -39,7 +39,7 @@ export const addTodos = async (
   req: Request<{}, {}, CreateTodoRequest>,
   res: Response
 ): Promise<void> => {
-  // Normalize date to start of today
+  // Normalize date to start of day
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
