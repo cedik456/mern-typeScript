@@ -67,7 +67,7 @@ export default function DailyFlipBook({
       height={500}
       showCover={false}
       maxShadowOpacity={0.3}
-      onFlip={(e) => {
+      onFlip={(e: any) => {
         const book = e.target; // e.target is the HTMLFlipBook instance
         const currentPage = book.getCurrentPageIndex();
         const date = new Date();
