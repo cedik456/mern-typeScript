@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend
+    origin: ["http://localhost:5173", "https://daily-ink.vercel.app"], // frontend
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // if you need cookies
   })
@@ -36,5 +36,5 @@ connectDB(MONGODB_URI);
 app.use("/api/todos/", todoRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
