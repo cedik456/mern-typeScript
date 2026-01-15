@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className=" flex flex-col items-center justify-center min-h-screen bg-[#0E0E0E] p-2">
-      <div className="border-gray-400/20 border  p-4 rounded-lg  md:w-1/4 w-full  shadow-lg  h-200 bg-[#FAFAFA]">
+      <div className="border-gray-400/20 border  p-4 rounded-lg  md:w-1/4 w-full  shadow-lg  h-180 bg-[#FAFAFA]">
         <DateNavigator viewDate={viewDate} setViewDate={setViewDate} />
         <TodoForm onAddTodo={addTodo} disabled={isMutating} />
 
