@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
 import type { Todo } from "../hooks/useTodos";
 import TodoItem from "./TodoItem";
