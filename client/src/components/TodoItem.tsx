@@ -72,14 +72,14 @@ export default function TodoItem({
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="text-sm w-full "
+                className="text-base w-full "
               />
 
               <input
                 type="text"
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
-                className="text-xs w-full "
+                className="text-base w-full "
               />
             </div>
 
@@ -102,14 +102,14 @@ export default function TodoItem({
           <div className="flex items-center justify-between w-full">
             <div className="flex-1 text-left min-w-0">
               <h3
-                className={`text-sm truncate ${
+                className={`text-base truncate ${
                   completed ? "line-through text-gray-400" : ""
                 }`}
               >
                 {todo.title}
               </h3>
               <p
-                className={`text-xs truncate wrap-break-word ${
+                className={`text-sm truncate wrap-break-word ${
                   completed ? "line-through text-gray-400" : ""
                 }`}
               >
