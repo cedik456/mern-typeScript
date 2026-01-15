@@ -14,7 +14,7 @@ interface DailyFlipBookProps {
 }
 
 export default function DailyFlipBook({
-  todos, // <- destructure it here
+  todos,
   onAddTodo,
   updateTodo,
   deleteTodo,
