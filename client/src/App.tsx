@@ -23,8 +23,8 @@ function App() {
   } = useTodos(viewDate);
 
   return (
-    <div className=" flex flex-col items-center justify-center min-h-screen bg-[#0E0E0E] p-2">
-      <div className="border-gray-400/20 border  p-4 rounded-lg  md:w-1/4 w-full  shadow-lg  h-180 bg-[#FAFAFA]">
+    <div className=" flex flex-col items-center justify-center min-h-screen bg-white p-2">
+      <div className="border-gray-400/20 border  p-4 rounded-3xl  md:w-1/2 w-full  shadow-lg  h-150 bg-[#FAFAFA] flex flex-col">
         <DateNavigator viewDate={viewDate} setViewDate={setViewDate} />
         <TodoForm onAddTodo={addTodo} disabled={isMutating} />
 
@@ -32,7 +32,7 @@ function App() {
 
         {/* <hr className="text-gray-400 w-full my-4" /> */}
 
-        <ul>
+        <ul className="overflow-y-auto flex-1">
           {todos.map((todo) => (
             <TodoItem
               key={todo._id}

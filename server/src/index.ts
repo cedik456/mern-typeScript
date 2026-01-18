@@ -8,9 +8,14 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://daily-ink.vercel.app"]
+    : ["http://localhost:5173", "http://localhost:5174"];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://daily-ink.vercel.app"], // frontend
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // if you need cookies
   })
