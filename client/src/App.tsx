@@ -23,7 +23,7 @@ function App() {
   } = useTodos(viewDate);
 
   return (
-    <div className=" flex flex-col items-center justify-center min-h-screen bg-white p-2">
+    <div className=" flex flex-col items-center justify-center h-screen bg-white p-2 overflow-hidden">
       <div className="border-gray-400/20 border  p-4 rounded-3xl  md:w-1/2 w-full  shadow-lg  h-150 bg-[#FAFAFA] flex flex-col">
         <DateNavigator viewDate={viewDate} setViewDate={setViewDate} />
         <TodoForm onAddTodo={addTodo} disabled={isMutating} />
